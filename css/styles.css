@@ -1,0 +1,14 @@
+/* 标题 */
+.page-title {
+  text-align: center;
+  margin-bottom: 10px; /* 调整标题与副标题的间距 */
+}
+
+/* 副标题 */
+.page-subtitle {
+  text-align: center;
+  color: #888; 
+  font-size: 0.9em; 
+  opacity: 0.8;
+  margin-top: -5px; /* 进一步微调间距 */
+}
