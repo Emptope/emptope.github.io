@@ -1470,7 +1470,7 @@ table td {
   vertical-align: middle;
 }
 *::selection {
-  background: #00c4b6;
+  background: #bd93f9;
   color: #f7f7f7;
 }
 button {
@@ -4006,7 +4006,7 @@ figure.highlight pre .javascript .function {
   overflow-wrap: break-word;
 }
 .container a {
-  color: #99a9bf;
+  color: #6272a4;
 }
 .container a:hover {
   text-decoration: underline;
