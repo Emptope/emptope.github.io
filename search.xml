@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>3/6/2025 更新日志</title>
-    <url>/2025/03/06/3-6-2025-%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97/</url>
-    <content><![CDATA[<h2 id="更新">更新</h2>
-<ul>
-<li>使用了单幅图片作为背景，修改了 top_img 的设置。</li>
-<li>在网站板块增加了一些常用链接，完善了板块的划分方式。</li>
-<li>调整了网站配色，使用了类 Dracula 配色方案。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// top_img settings</span><br><span class="line">+ $ROOT/themes/butterfly/source/css/_page/topimg.styl</span><br><span class="line">+ $ROOT/themes/butterfly/source/css/modify.styl</span><br><span class="line">+ $ROOT/themes/butterfly/scripts/modify.js</span><br><span class="line">changed $ROOT/themes/butterfly/layout/post.pug</span><br><span class="line">changed $ROOT/themes/butterfly/source/_mode/darkmode.styl</span><br><span class="line">// color theme settings</span><br><span class="line">changed $ROOT/_config.butterfly.yml</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Blog大事纪</category>
-      </categories>
-      <tags>
-        <tag>纪事</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>你好!</title>
     <url>/2025/01/29/hello/</url>
     <content><![CDATA[<p>欢迎来到我的Blog!<br>
@@ -31,6 +13,24 @@
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span></p>
 <p>这是图片插入测试</p>
 <p><img src="celestial_mountains.jpg" alt="Celestial Mountains"></p>
+]]></content>
+      <categories>
+        <category>Blog大事纪</category>
+      </categories>
+      <tags>
+        <tag>纪事</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>3/6/2025 更新日志</title>
+    <url>/2025/03/06/3-6-2025-%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<h2 id="更新">更新</h2>
+<ul>
+<li>使用了单幅图片作为背景，修改了 top_img 的设置。</li>
+<li>在网站板块增加了一些常用链接，完善了板块的划分方式。</li>
+<li>调整了网站配色，使用了类 Dracula 配色方案。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// top_img settings</span><br><span class="line">+ $ROOT/themes/butterfly/source/css/_page/topimg.styl</span><br><span class="line">+ $ROOT/themes/butterfly/source/css/modify.styl</span><br><span class="line">+ $ROOT/themes/butterfly/scripts/modify.js</span><br><span class="line">changed $ROOT/themes/butterfly/layout/post.pug</span><br><span class="line">changed $ROOT/themes/butterfly/source/_mode/darkmode.styl</span><br><span class="line">// color theme settings</span><br><span class="line">changed $ROOT/_config.butterfly.yml</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>Blog大事纪</category>
