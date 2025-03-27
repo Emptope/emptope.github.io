@@ -1,0 +1,20 @@
+/* 标题 */
+.page-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* 副标题 */
+.page-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 1.1em; 
+  opacity: 0.9;
+  margin-top: -5px;
+}
+
+/* page文章内容 */
+.page-content {
+  text-indent: 2em;
+}
