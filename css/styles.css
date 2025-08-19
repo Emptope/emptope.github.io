@@ -1,0 +1,35 @@
+/* 主页标题 */
+.page-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* 主页副标题 */
+.page-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 1.1em; 
+  opacity: 0.9;
+  margin-top: -5px;
+}
+
+/* 主页内容 */
+.page-content {
+  text-indent: 2em;
+}
+
+/* 最近 post 标题 */ 
+.recent-post-item .article-title {
+  font-size: 1.5em;
+}
+
+/* 最近 post 描述 */
+.recent-post-item .content {
+  font-size: 1.2em;
+}
+
+/* post 内容 */
+.post-content {
+  font-size: 18px;
+}
