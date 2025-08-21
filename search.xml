@@ -45,7 +45,7 @@
 <p>注：对于 I/O 控制器类型，ChatGPT 给出的建议是：通用/兼容性优先：选 LSI Logic，模拟 LSI Logic Parallel (并行 SCSI 控制器)；新系统 + 大容量磁盘（&gt; 2TB）：选 LSI Logic SAS，模拟串行连接 SCSI (Serial Attached SCSI, SAS) 控制器；高性能需求（数据库/IO密集型）：选准虚拟化 SCSI (PVSCSI)，这是 VMware 自己的 paravirtualized SCSI 控制器；非常老的操作系统：才考虑 BusLogic。</p>
 </blockquote>
 <h2 id="安装前的准备">安装前的准备</h2>
-<p>在新创建的虚拟机窗口，打开 <code>编辑虚拟机设置</code>，选择 <code>处理器</code>，勾选 <code>虚拟化 Intel VT-x/EPT 或 AMD-V/RVI</code> 和 <code>虚拟化 IOMMU</code>，选择 <code>显示</code>，勾选 <code>加速 3D 图形</code>，将图形内存拉满，在 <code>选项</code>中，选择 <code>高级</code>，将 <code>抓取的输入内容</code>调整为 <code>高</code>，将<code>收集调试信息</code>调整为<code>无</code>，并且勾选 <code>禁用内存页面修整</code>。根据需求选择 BIOS 或者 UEFI 启动。</p>
+<p>在新创建的虚拟机窗口，打开 <code>编辑虚拟机设置</code>，选择 <code>处理器</code>，勾选 <code>虚拟化 Intel VT-x/EPT 或 AMD-V/RVI</code> 和 <code>虚拟化 IOMMU</code>，选择 <code>显示</code>，勾选 <code>加速 3D 图形</code>，将图形内存拉满，在 <code>选项</code>中，选择 <code>高级</code>，将 <code>抓取的输入内容</code>调整为 <code>高</code>，将 <code>收集调试信息</code> 调整为 <code>无</code>，并且勾选 <code>禁用内存页面修整</code>。根据需求选择 BIOS 或者 UEFI 启动。</p>
 <blockquote>
 <p>特别注意：在 <code>固件类型</code> 中，如果选择使用 BIOS 启动，必须使用 MBR 分区表进行磁盘分区，如果选择使用 UEFI 启动，必须使用 GPT 分区表进行磁盘分区，否则会出现系统无法启动的问题，原因是 BIOS 无法识别 GPT 分区表的启动信息，UEFI 无法找到 MBR 分区表的 EFI 系统分区。由于 UEFI + GPT 更为现代，因此大多数情况下都选择使用 UEFI + GPT 安装。</p>
 </blockquote>
@@ -281,8 +281,8 @@
 <p>重启即可。</p>
 <p>或者临时挂载：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other</span><br></pre></td></tr></table></figure>
-<h3 id="虚拟机总是使用-CPU-的效率核（E-core）">虚拟机总是使用 CPU 的效率核（E-core）</h3>
-<p>找到 VMware 的可执行文件或快捷方式，打开属性的<code>兼容性</code>选项，勾选<code>以管理员身份运行此程序</code>，可避免虚拟机不使用 P-core，即性能核。</p>
+<h3 id="虚拟机总是使用效率核（E-core）">虚拟机总是使用效率核（E-core）</h3>
+<p>找到 VMware 的可执行文件或快捷方式，打开属性的 <code>兼容性</code> 选项，勾选 <code>以管理员身份运行此程序</code>，可避免虚拟机不使用 P-core，即性能核。</p>
 <h2 id="写在最后">写在最后</h2>
 <p>安装 Arch 不仅是个熟悉 Linux 的过程，也是个体力活… Arch 是介于 Ubuntu 这种开箱即用的发行版和 Gentoo 这种全部自己动手配置的发行版之间的一种平衡，说实话对我来说已经够用了。</p>
 ]]></content>
