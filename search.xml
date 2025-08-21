@@ -1,57 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>Arch 虚拟机安装小结</title>
-      <link href="/2025/08/19/Arch-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85%E5%B0%8F%E7%BB%93/"/>
-      <url>/2025/08/19/Arch-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85%E5%B0%8F%E7%BB%93/</url>
-      
-        <content type="html"><![CDATA[<p>暑假闲来无事整了台 Arch 虚拟机玩玩，刚好记录一下安装的流程以及可能出现的问题。安装步骤力求简单直接，即省略了大部分可有可无的步骤，只保留必要步骤。</p><blockquote><p>注：在安装 Arch 前，请确保您有基础的 Linux 使用经验和知识，并且熟悉命令行操作。</p></blockquote><p>物理机配置如下：</p><ul><li>宿主机 Windows 11 专业版 24H2</li><li>使用 VMware Workstation 17 Pro</li><li>虚拟机 iso 为 archlinux-2025.07.01-x86_64</li><li>CPU 为 Intel® Core™ Ultra 9 185H (22) @ 5.10 GHz</li><li>GPU 为 NVIDIA GeForce RTX 4060 Laptop GPU</li></ul><h2 id="VMware-虚拟机创建流程">VMware 虚拟机创建流程</h2><p>在 VMware 新建一台虚拟机 &gt; 选择自定义（高级）&gt; 使用 iso 安装 &gt; 内核版本选择其他 Linux 6.x 内核 64 位 &gt; 处理器数量和内存根据物理机配置而定 &gt; 网络使用 NAT 连接 &gt; SCSI 选择 LSI Logic &gt; 虚拟磁盘类型根据物理机的磁盘类型选择，固态硬盘（SSD）选择 NVMe，其他硬盘优先选择 SCSI &gt; 选择创建新虚拟磁盘（即 .vmdk） &gt; 根据物理机的磁盘空间大小选择虚拟磁盘大小，选择将虚拟磁盘存储为单个文件（可提高磁盘读写性能） &gt; 接着完成虚拟机创建。</p><blockquote><p>注：一般建议将虚拟机的处理器内核总数设置为物理机线程数的一半，如果物理机线程较多，可以按将虚拟机的处理器内核总数设置为物理机线程数的 2/3 左右，这样可以让虚拟机有更好的性能。</p></blockquote><blockquote><p>注：对于 I/O 控制器类型，ChatGPT 给出的建议是：通用/兼容性优先：选 LSI Logic，模拟 LSI Logic Parallel (并行 SCSI 控制器)；新系统 + 大容量磁盘（&gt; 2TB）：选 LSI Logic SAS，模拟串行连接 SCSI (Serial Attached SCSI, SAS) 控制器；高性能需求（数据库/IO密集型）：选准虚拟化 SCSI (PVSCSI)，这是 VMware 自己的 paravirtualized SCSI 控制器；非常老的操作系统：才考虑 BusLogic。</p></blockquote><h2 id="安装前的准备">安装前的准备</h2><p>在新创建的虚拟机窗口，打开 <code>编辑虚拟机设置</code>，选择 <code>处理器</code>，勾选 <code>虚拟化 Intel VT-x/EPT 或 AMD-V/RVI</code> 和 <code>虚拟化 IOMMU</code>，选择 <code>显示</code>，勾选 <code>加速 3D 图形</code>，将图形内存拉满，在 <code>选项</code>中，选择 <code>高级</code>，将 <code>抓取的输入内容</code>调整为 <code>高</code>，并且勾选 <code>禁用内存页面修整</code>。根据需求选择 BIOS 或者 UEFI 启动。</p><blockquote><p>特别注意：在 <code>固件类型</code> 中，如果选择使用 BIOS 启动，必须使用 MBR 分区表进行磁盘分区，如果选择使用 UEFI 启动，必须使用 GPT 分区表进行磁盘分区，否则会出现系统无法启动的问题，原因是 BIOS 无法识别 GPT 分区表的启动信息，UEFI 无法找到 MBR 分区表的 EFI 系统分区。由于 UEFI + GPT 更为现代，因此大多数情况下都选择使用 UEFI + GPT 安装。</p></blockquote><blockquote><p>特别注意：在使用 VMware 虚拟机前，若要避免出现一些奇怪的问题（如输入卡顿等），请务必确认关闭 Windows 的 Hyper-V 虚拟层，流程如下：</p><p>重要提示：这些步骤可能会因 Windows 版本而异。</p><ol><li>打开控制面板。</li><li>依次选择 程序 &gt; 程序和功能。</li><li>选择 启用或关闭 Windows 功能。</li><li>取消选择 Hyper-V。</li><li>重启计算机。</li></ol></blockquote><h2 id="开始安装-Arch">开始安装 Arch</h2><blockquote><p>可参考 <a href="https://wiki.archlinuxcn.org/wiki/%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97">Arch Linux 的官方安装指南</a>。</p></blockquote><p>开机，调整窗口大小，按 <code>Ctrl+Alt+Enter</code> 可进入全屏模式，按 <code>Ctrl+Alt</code> 可移出光标聚焦，正常启动显示如下安装画面。</p><p><img src="start.png" alt="开始安装 Arch"></p><p>OK! 接下来开始安装吧~</p><blockquote><p>善用 Tab 键可减少错误输入。</p></blockquote><p>先确认使用 UEFI 模式启动：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /sys/firmware/efi/efivars</span><br></pre></td></tr></table></figure><p>如果目录不存在，则是以 BIOS 启动。</p><h3 id="联网">联网</h3><p>显示可用网络：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip <span class="built_in">link</span></span><br></pre></td></tr></table></figure><p>选择对应网络名称（这里为 ens33），然后使用 <code>dhcpcd</code>（DHCP Client Daemon）自动获取 ip 地址：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhcpcd ens33</span><br></pre></td></tr></table></figure><p>然后 <code>ping</code> 一下 <a href="http://archlinux.org">archlinux.org</a> 看看网络连通性（或者 <a href="http://baidu.com">baidu.com</a> 也行）：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping archlinux.org</span><br></pre></td></tr></table></figure><p>一切正常的话如下图：<br><img src="connect_to_ethernet.png" alt="联网流程"></p><h3 id="磁盘分区、格式化与挂载">磁盘分区、格式化与挂载</h3><p>磁盘的使用必须经过：分区、格式化与挂载，分别常用的命令为 <code>gdisk</code>，<code>mkfs</code>，<code>mount</code> 三个命令。</p><h4 id="分区">分区</h4><p>首先查看磁盘：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure><p>本记录使用一个 50G 的 NVMe 磁盘作为演示，能看到系统有一个 50G 的 <code>nvme0n1</code> 还没有分区，我们对它进行分区。</p><p>GPT 分区表建议使用 <code>gdisk</code> 进行分区，MBR 分区表建议使用 <code>fdisk</code> 进行分区，或者两者都可以使用通用的 <code>parted</code> 进行分区，这里使用 <code>gdisk</code> 进行分区：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure><p>可以使用 <code>?</code> 查看 gdisk 相关命令。</p><p><img src="gdisk_start.png" alt="使用 gdisk 开始分区"></p><p><a href="https://wiki.archlinuxcn.org/wiki/%E5%88%86%E5%8C%BA#%E5%B8%83%E5%B1%80%E7%A4%BA%E4%BE%8B">Arch Wiki</a> 建议 EFI 分区至少为 1GB，swap 分区至少为 4GB。虽然现在的磁盘读写性能已经使 swap 没有什么存在的必要了，但是我们依然按照 Arch Wiki 的建议来进行分区。</p><p>使用 <code>n</code> 新建一个 EFI 分区，大小为 1GB：</p><p><img src="gdisk_efi.png" alt="分配 EFI"></p><p>在 Last sector 后使用 +1G 即可分配 1G 容量；<code>ef00</code> 是 EFI 文件系统的代码；使用 <code>p</code> 可以打印当前已存在的分区，确认无误。</p><p>使用 <code>n</code> 新建一个 swap 分区，大小为 4GB：</p><p><img src="gdisk_swap.png" alt="分配 swap"></p><p><code>8200</code> 是 Linux swap 代码。</p><p>使用 <code>n</code> 新建一个 Linux 文件系统分区，大小为剩下的所有容量：</p><p><img src="gdisk_filesystem.png" alt="分配文件系统"></p><p><code>8300</code> 是 Linux filesystem 代码。</p><p>按下 <code>w</code> 保存更改并退出 gdisk。</p><p>再次使用 <code>lsblk</code> 查看分区情况，确认无误后可进行格式化。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure><h4 id="格式化">格式化</h4><p>使用 <code>mkfs</code> 进行格式化：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br><span class="line">mkswap /dev/nvme0n1p2</span><br><span class="line">mkfs.ext4 /dev/nvme0n1p3</span><br></pre></td></tr></table></figure><p>当然你也可以选择自己喜欢的文件系统 (xfs, ext3, …)，这里选择 ext4 作为演示。</p><p><img src="format.png" alt="格式化分区"></p><h4 id="挂载文件系统">挂载文件系统</h4><blockquote><p>一般情况下，进行挂载前，最好先确定几件事：</p><ul><li>单一文件系统不应该被重复挂载在不同的挂载点（目录）中；</li><li>单一目录不应该重复挂载多个文件系统；</li><li>要作为挂载点的目录，理论上应该都是空目录才行。</li></ul><p>参考：<a href="https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#mount">https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#mount</a></p></blockquote><p>使用 <code>mount</code> 挂载文件系统，使用 <code>swapon</code> 开启 swap：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount --<span class="built_in">mkdir</span> /dev/nvme0n1p1 /mnt/efi</span><br><span class="line">swapon /dev/nvme0n1p2</span><br><span class="line">mount /dev/nvme0n1p3 /mnt</span><br></pre></td></tr></table></figure><p>使用 <code>lsblk</code> 确认文件系统已经被正确挂载。</p><p><img src="mount.png" alt="挂载文件系统"></p><blockquote><p>注：示例的 /efi 文件夹命名并不遵守 FHS （Filesystem Hierarchy Standard），关于 EFI 文件系统到底是挂载在 /boot/efi 更合理还是挂载在 /efi 更合理，一直有争议，目前尚未解决。</p><p>参考：</p><ul><li>/boot, /boot/efi or /efi: <a href="https://www.reddit.com/r/archlinux/comments/1f9d40g/efi_partition_boot_bootefi_or_efi/">https://www.reddit.com/r/archlinux/comments/1f9d40g/efi_partition_boot_bootefi_or_efi/</a></li><li>FHS: <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html">https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html</a></li></ul></blockquote><p>这是安装 Linux 最重要的步骤之一，请务必确认正确操作！</p><h3 id="选择镜像">选择镜像</h3><p>使用 iso 自带的 <code>reflector</code> 自动选择最快的镜像：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="built_in">cp</span> /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup</span><br><span class="line"><span class="comment"># 选择镜像并保存</span></span><br><span class="line">reflector --verbose --latest 10 --<span class="built_in">sort</span> rate --save /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure><p><img src="reflector.png" alt="选择镜像"></p><p>虽然有很多镜像连接失败，但是实测使用 <code>reflector</code> 后下载速度明显提高，如果觉得下载速度太慢可以尝试替换成清华源，或者多试几次。</p><h3 id="安装系统和工具">安装系统和工具</h3><p>使用 <code>pacstrap</code> 安装系统和工具：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacstrap /mnt base linux linux-firmware net-tools networkmanager openssh vi vim </span><br></pre></td></tr></table></figure><p>安装 <code>vi</code> 是为了使用 <code>visudo</code>。</p><h3 id="创建-File-System-Table-fstab">创建 File System Table (fstab)</h3><blockquote><p>系统挂载的一些限制：</p><ul><li>根目录 / 是必须挂载的，而且一定要先于其他 mount point 被挂载进来；</li><li>其他 mount point 必须为已建立的目录，可任意指定，但一定要遵守必须的系统目录架构原则 (FHS) ；</li><li>所有 mount point 在同一时间内，只能挂载一次；</li><li>所有 partition 在同一时间内，只能挂载一次；</li><li>如若进行卸载，您必须先将工作目录移到 mount point （及其子目录）之外。</li></ul><p>参考：</p><ul><li>fstab: <a href="https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#fstab">https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#fstab</a></li></ul></blockquote><p>/etc/fstab 就是将我们利用 <code>mount</code> 指令进行挂载时，将所有的选项与参数写入到这个文档中。开机时，操作系统根据这个文件里的记录，自动挂载记录的文件系统到对应目录下。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure><p><code>-U</code> 指记录分区的 UUID（Universally Unique IDentifier），因为每块磁盘每个分区的 UUID 是唯一的，因此比较推荐使用 UUID 来记录。</p><p>使用以下命令验证 fstab 的正确性：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /mnt/etc/fstab</span><br></pre></td></tr></table></figure><p>有时候 <code>genfstab</code> 会莫名其妙少掉几个文件系统或者根本不工作，这时候把所有文件系统重新挂载一遍然后再次使用 <code>genfstab</code> 的上述命令，进入 vim 手动删除多余的记录即可。确保根目录 / 最先挂载。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /mnt/etc/fstab</span><br></pre></td></tr></table></figure><p><img src="edit_fstab.png" alt="使用 vim 手动编辑 fstab"></p><blockquote><p>注：需要知道如何使用 vim 进行编辑和保存退出。</p></blockquote><h3 id="Arch-系统配置">Arch 系统配置</h3><p>进入新系统：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure><blockquote><p>注：进入前请再次确认文件系统已被正确挂载。</p></blockquote><h4 id="设置系统语言">设置系统语言</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/locale.gen</span><br></pre></td></tr></table></figure><p>使用 vim 的搜索功能，找到 en_US.UTF-8 UFT-8 或者 zh_CN.UTF-8 UTF-8 （根据个人喜好），取消注释，这里选择 en_US.UTF-8：</p><p><img src="locale-gen.png" alt="设置 locale.gen"></p><p>保存退出，生成语言环境。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure><p>设置 LANG 变量。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;LANG=en_US.UTF-8&quot;</span>  &gt; /etc/locale.conf</span><br></pre></td></tr></table></figure><h4 id="设置时区">设置时区</h4><p>创建到上海时区的软连接：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure><blockquote><p>注：善用 Tab</p></blockquote><p>将硬件时钟设置为 UTC：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwclock --systohc --utc</span><br></pre></td></tr></table></figure><h4 id="设置主机名">设置主机名</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> “<span class="built_in">arch</span>“ &gt; /etc/hostname</span><br></pre></td></tr></table></figure><p><code>arch</code> 可替换成个人喜好的主机名。</p><h4 id="设置-root-密码">设置 root 密码</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure><h4 id="安装-GRUB-引导程序">安装 GRUB 引导程序</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br><span class="line">grub-install --efi--directory=/efi</span><br><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure><h3 id="重新启动">重新启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure><h2 id="成功安装-Arch">成功安装 Arch</h2><p>重启后 GRUB 应能正确识别 EFI 并且加载 Arch Linux，使用 root 账户登录后显示如下界面：</p><p><img src="success.png" alt="成功安装 Arch Linux"></p><h3 id="联网-2">联网</h3><p>使用 <code>systemctl</code> 启动 <code>NetworkManager</code>：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start NetworkManager</span><br><span class="line">systemctl status NetworkManager</span><br><span class="line">systemctl <span class="built_in">enable</span> NetworkManager</span><br></pre></td></tr></table></figure><p><img src="NetworkManager.png" alt="启动网络"></p><h3 id="创建用户">创建用户</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useradd -mg <span class="built_in">users</span> -G wheel,storage,power -s /bin/bash your_new_user</span><br><span class="line">passwd your_new_user</span><br><span class="line">chage -d 0 your_new_user</span><br></pre></td></tr></table></figure><p><code>your_new_user</code> 可以替换。<br><code>chage -d 0</code> 使用户密码过期，以便登录时重置密码，不过虚拟机使用 sddm 登录时出现了一些输入问题，因此此处可选择不执行，或者通过 <code>Ctrl+Alt+F1</code> 等调出 tty 来登录并修改密码。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pacman -S <span class="built_in">sudo</span></span><br><span class="line">visudo</span><br></pre></td></tr></table></figure><p>找到 <code>%wheel ALL=(ALL:ALL) ALL</code> 取消注释。</p><p><img src="wheel.png" alt="取消注释 wheel 群组"></p><blockquote><p>参考：<a href="https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php#users">https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php#users</a></p></blockquote><h3 id="图形界面安装">图形界面安装</h3><blockquote><p>注：可安装并使用 <code>reflector</code> 提高下载速度，见前文。</p></blockquote><p>示例安装 KDE Plasma 6 桌面，可根据喜好选择安装其他桌面（GNOME，Xfce，Hyprland…）</p><h4 id="安装驱动">安装驱动</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xf86-video-intel</span><br></pre></td></tr></table></figure><h4 id="安装-Xorg">安装 Xorg</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S xorg</span><br></pre></td></tr></table></figure><blockquote><p>注：如果使用 KDE 或 GNOME 桌面，其本身已支持 Wayland，不需要单独安装 Xorg。</p><p>参考：<a href="https://wiki.archlinuxcn.org/wiki/KDE">https://wiki.archlinuxcn.org/wiki/KDE</a></p></blockquote><h4 id="安装-sddm">安装 sddm</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pacman -S sddm</span><br><span class="line">systemctl <span class="built_in">enable</span> sddm</span><br></pre></td></tr></table></figure><h4 id="安装-Plasma-桌面">安装 Plasma 桌面</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S plasma konsole</span><br></pre></td></tr></table></figure><blockquote><p>注：<code>kde-applications</code> 为 KDE 桌面的全套应用，由于太多用不到，故只安装桌面和终端。</p></blockquote><h4 id="安装-fcitx5-输入法">安装 fcitx5 输入法</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S fcitx5 fcitx5-configtool fcitx5-chinese-addons fcitx5-qt fcitx5-gtk</span><br></pre></td></tr></table></figure><h4 id="安装文泉驿中文字体">安装文泉驿中文字体</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S wqy-microhei</span><br></pre></td></tr></table></figure><h4 id="重启">重启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure><p>重启后应该正常进入 sddm 界面：</p><p><img src="sddm.png" alt="sddm 界面"></p><p>输入密码后进入 KDE Plasma 桌面：</p><p><img src="kde-plasma.png" alt="KDE Plasma 桌面"></p><p><img src="fastfetch.png" alt="虚拟机信息"></p><h2 id="安装后的常见问题">安装后的常见问题</h2><h3 id="主机共享剪贴板">主机共享剪贴板</h3><p>安装 <code>open-vm-tools</code>：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S open-vm-tools</span><br></pre></td></tr></table></figure><p>重启，然后就可以用啦~</p><h3 id="分辨率">分辨率</h3><p>鼠标右键进入 <code>Display Configuration</code>，调整分辨率和缩放，使界面清晰。</p><p><img src="resolution.png" alt="Display Configuration"></p><h3 id="网络代理">网络代理</h3><p>VMware 提供的主机地址为 <code>192.168.245.1</code> ，设置即可。</p><h3 id="声音">声音</h3><p>找到 konsole，安装 firefox 浏览器：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S firefox</span><br></pre></td></tr></table></figure><p>随便打开一个视频，发现虚拟机十分卡顿，并且没有声音：</p><p><img src="bad_apple.png" alt="播放 Bad Apple"></p><p>解决方案：需要按如下方式编辑 WirePlumber 配置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.config/wireplumber/wireplumber.conf.d/</span><br><span class="line"><span class="built_in">cd</span> ~/.config/wireplumber/wireplumber.conf.d</span><br></pre></td></tr></table></figure><p>然后在编辑器中创建 <code>~/.config/wireplumber/wireplumber.conf.d/50-alsa-config.conf</code> 并添加：</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">monitor.alsa.rules = <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    matches = <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        node.name = <span class="string">&quot;~alsa_output.*&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">    actions = <span class="punctuation">&#123;</span></span><br><span class="line">      update-props = <span class="punctuation">&#123;</span></span><br><span class="line">        api.alsa.period-size   = <span class="number">1024</span></span><br><span class="line">        api.alsa.headroom      = <span class="number">8192</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure><p>之后，通过 <code>systemctl --user restart wireplumber pipewire pipewire-pulse</code> 重新启动所有服务。</p><blockquote><p>参考：</p><ul><li><a href="https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Troubleshooting#stuttering-audio-in-virtual-machine">Pipewire Wiki</a></li><li><a href="https://www.reddit.com/r/Ubuntu/comments/1ga9shh/audio_stuttering_issue_in_ubuntu_2410_virtual/?tl=zh-hans">Ubuntu 24.10 虚拟机在 VMWare Pro 17 上音频卡顿问题，宿主机是 Windows 11</a></li></ul></blockquote><h3 id="找不到主机共享文件夹">找不到主机共享文件夹</h3><p>大部分原因是开机后共享文件夹没有自动挂载，导致 /mnt/hgfs 下找不到共享文件夹。</p><p>解决方案：将共享文件夹写入 fstab 使其开机自动挂载：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;.host:/ /mnt/hgfs fuse.vmhgfs-fuse allow_other,defaults 0 0&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/fstab</span><br></pre></td></tr></table></figure><p>重启即可。</p><p>或者临时挂载：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other</span><br></pre></td></tr></table></figure><h2 id="写在最后">写在最后</h2><p>安装 Arch 不仅是个熟悉 Linux 的过程，也是个体力活… Arch 是介于 Ubuntu 这种开箱即用的发行版和 Gentoo 这种全部自己动手配置的发行版之间的一种平衡，说实话对我来说已经够用了。</p>]]></content>
-      
-      
+<search>
+  <entry>
+    <title>你好!</title>
+    <url>/2025/01/29/hello/</url>
+    <content><![CDATA[<p>欢迎来到我的 Blog!<br>
+这是我的第一篇文章。<br>
+(十分简短…)</p>
+<p>这是代码块测试</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Hello World!&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是数学公式测试</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + b = c 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span></p>
+<p>这是图片插入测试</p>
+<p><img src="celestial_mountains.jpg" alt="Celestial Mountains"></p>
+]]></content>
       <categories>
-          
-          <category> 技术 </category>
-          
+        <category>Blog 大事纪</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>你好!</title>
-      <link href="/2025/01/29/hello/"/>
-      <url>/2025/01/29/hello/</url>
-      
-        <content type="html"><![CDATA[<p>欢迎来到我的 Blog!<br>这是我的第一篇文章。<br>(十分简短…)</p><p>这是代码块测试</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Hello World!&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这是数学公式测试</p><p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + b = c </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span></p><p>这是图片插入测试</p><p><img src="celestial_mountains.jpg" alt="Celestial Mountains"></p>]]></content>
-      
-      
+      <tags>
+        <tag>纪事</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Arch 虚拟机安装小结</title>
+    <url>/2025/08/19/Arch-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85%E5%B0%8F%E7%BB%93/</url>
+    <content><![CDATA[<p>暑假闲来无事整了台 Arch 虚拟机玩玩，刚好记录一下安装的流程以及可能出现的问题。安装步骤力求简单直接，即省略了大部分可有可无的步骤，只保留必要步骤。</p>
+<blockquote>
+<p>注：在安装 Arch 前，请确保您有基础的 Linux 使用经验和知识，并且熟悉命令行操作。</p>
+</blockquote>
+<p>物理机配置如下：</p>
+<ul>
+<li>宿主机 Windows 11 专业版 24H2</li>
+<li>使用 VMware Workstation 17 Pro</li>
+<li>虚拟机 iso 为 archlinux-2025.07.01-x86_64</li>
+<li>CPU 为 Intel® Core™ Ultra 9 185H (22) @ 5.10 GHz</li>
+<li>GPU 为 NVIDIA GeForce RTX 4060 Laptop GPU</li>
+</ul>
+<h2 id="VMware-虚拟机创建流程">VMware 虚拟机创建流程</h2>
+<p>在 VMware 新建一台虚拟机 &gt; 选择自定义（高级）&gt; 使用 iso 安装 &gt; 内核版本选择其他 Linux 6.x 内核 64 位 &gt; 处理器数量和内存根据物理机配置而定 &gt; 网络使用 NAT 连接 &gt; SCSI 选择 LSI Logic &gt; 虚拟磁盘类型根据物理机的磁盘类型选择，固态硬盘（SSD）选择 NVMe，其他硬盘优先选择 SCSI &gt; 选择创建新虚拟磁盘（即 .vmdk） &gt; 根据物理机的磁盘空间大小选择虚拟磁盘大小，选择将虚拟磁盘存储为单个文件（可提高磁盘读写性能） &gt; 接着完成虚拟机创建。</p>
+<blockquote>
+<p>注：一般建议将虚拟机的处理器内核总数设置为物理机线程数的一半，如果物理机线程较多，可以按将虚拟机的处理器内核总数设置为物理机线程数的 2/3 左右，这样可以让虚拟机有更好的性能。</p>
+</blockquote>
+<blockquote>
+<p>注：对于 I/O 控制器类型，ChatGPT 给出的建议是：通用/兼容性优先：选 LSI Logic，模拟 LSI Logic Parallel (并行 SCSI 控制器)；新系统 + 大容量磁盘（&gt; 2TB）：选 LSI Logic SAS，模拟串行连接 SCSI (Serial Attached SCSI, SAS) 控制器；高性能需求（数据库/IO密集型）：选准虚拟化 SCSI (PVSCSI)，这是 VMware 自己的 paravirtualized SCSI 控制器；非常老的操作系统：才考虑 BusLogic。</p>
+</blockquote>
+<h2 id="安装前的准备">安装前的准备</h2>
+<p>在新创建的虚拟机窗口，打开 <code>编辑虚拟机设置</code>，选择 <code>处理器</code>，勾选 <code>虚拟化 Intel VT-x/EPT 或 AMD-V/RVI</code> 和 <code>虚拟化 IOMMU</code>，选择 <code>显示</code>，勾选 <code>加速 3D 图形</code>，将图形内存拉满，在 <code>选项</code>中，选择 <code>高级</code>，将 <code>抓取的输入内容</code>调整为 <code>高</code>，将<code>收集调试信息</code>调整为<code>无</code>，并且勾选 <code>禁用内存页面修整</code>。根据需求选择 BIOS 或者 UEFI 启动。</p>
+<blockquote>
+<p>特别注意：在 <code>固件类型</code> 中，如果选择使用 BIOS 启动，必须使用 MBR 分区表进行磁盘分区，如果选择使用 UEFI 启动，必须使用 GPT 分区表进行磁盘分区，否则会出现系统无法启动的问题，原因是 BIOS 无法识别 GPT 分区表的启动信息，UEFI 无法找到 MBR 分区表的 EFI 系统分区。由于 UEFI + GPT 更为现代，因此大多数情况下都选择使用 UEFI + GPT 安装。</p>
+</blockquote>
+<blockquote>
+<p>特别注意：在使用 VMware 虚拟机前，若要避免出现一些奇怪的问题（如输入卡顿等），请务必确认关闭 Windows 的 Hyper-V 虚拟层，流程如下：</p>
+<p>重要提示：这些步骤可能会因 Windows 版本而异。</p>
+<ol>
+<li>打开控制面板。</li>
+<li>依次选择 程序 &gt; 程序和功能。</li>
+<li>选择 启用或关闭 Windows 功能。</li>
+<li>取消选择 Hyper-V。</li>
+<li>重启计算机。</li>
+</ol>
+</blockquote>
+<h2 id="开始安装-Arch">开始安装 Arch</h2>
+<blockquote>
+<p>可参考 <a href="https://wiki.archlinuxcn.org/wiki/%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97">Arch Linux 的官方安装指南</a>。</p>
+</blockquote>
+<p>开机，调整窗口大小，按 <code>Ctrl+Alt+Enter</code> 可进入全屏模式，按 <code>Ctrl+Alt</code> 可移出光标聚焦，正常启动显示如下安装画面。</p>
+<p><img src="start.png" alt="开始安装 Arch"></p>
+<p>OK! 接下来开始安装吧~</p>
+<blockquote>
+<p>善用 Tab 键可减少错误输入。</p>
+</blockquote>
+<p>先确认使用 UEFI 模式启动：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> /sys/firmware/efi/efivars</span><br></pre></td></tr></table></figure>
+<p>如果目录不存在，则是以 BIOS 启动。</p>
+<h3 id="联网">联网</h3>
+<p>显示可用网络：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip <span class="built_in">link</span></span><br></pre></td></tr></table></figure>
+<p>选择对应网络名称（这里为 ens33），然后使用 <code>dhcpcd</code>（DHCP Client Daemon）自动获取 ip 地址：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dhcpcd ens33</span><br></pre></td></tr></table></figure>
+<p>然后 <code>ping</code> 一下 <a href="http://archlinux.org">archlinux.org</a> 看看网络连通性（或者 <a href="http://baidu.com">baidu.com</a> 也行）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping archlinux.org</span><br></pre></td></tr></table></figure>
+<p>一切正常的话如下图：<br>
+<img src="connect_to_ethernet.png" alt="联网流程"></p>
+<h3 id="磁盘分区、格式化与挂载">磁盘分区、格式化与挂载</h3>
+<p>磁盘的使用必须经过：分区、格式化与挂载，分别常用的命令为 <code>gdisk</code>，<code>mkfs</code>，<code>mount</code> 三个命令。</p>
+<h4 id="分区">分区</h4>
+<p>首先查看磁盘：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+<p>本记录使用一个 50G 的 NVMe 磁盘作为演示，能看到系统有一个 50G 的 <code>nvme0n1</code> 还没有分区，我们对它进行分区。</p>
+<p>GPT 分区表建议使用 <code>gdisk</code> 进行分区，MBR 分区表建议使用 <code>fdisk</code> 进行分区，或者两者都可以使用通用的 <code>parted</code> 进行分区，这里使用 <code>gdisk</code> 进行分区：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gdisk /dev/nvme0n1</span><br></pre></td></tr></table></figure>
+<p>可以使用 <code>?</code> 查看 gdisk 相关命令。</p>
+<p><img src="gdisk_start.png" alt="使用 gdisk 开始分区"></p>
+<p><a href="https://wiki.archlinuxcn.org/wiki/%E5%88%86%E5%8C%BA#%E5%B8%83%E5%B1%80%E7%A4%BA%E4%BE%8B">Arch Wiki</a> 建议 EFI 分区至少为 1GB，swap 分区至少为 4GB。虽然现在的磁盘读写性能已经使 swap 没有什么存在的必要了，但是我们依然按照 Arch Wiki 的建议来进行分区。</p>
+<p>使用 <code>n</code> 新建一个 EFI 分区，大小为 1GB：</p>
+<p><img src="gdisk_efi.png" alt="分配 EFI"></p>
+<p>在 Last sector 后使用 +1G 即可分配 1G 容量；<code>ef00</code> 是 EFI 文件系统的代码；使用 <code>p</code> 可以打印当前已存在的分区，确认无误。</p>
+<p>使用 <code>n</code> 新建一个 swap 分区，大小为 4GB：</p>
+<p><img src="gdisk_swap.png" alt="分配 swap"></p>
+<p><code>8200</code> 是 Linux swap 代码。</p>
+<p>使用 <code>n</code> 新建一个 Linux 文件系统分区，大小为剩下的所有容量：</p>
+<p><img src="gdisk_filesystem.png" alt="分配文件系统"></p>
+<p><code>8300</code> 是 Linux filesystem 代码。</p>
+<p>按下 <code>w</code> 保存更改并退出 gdisk。</p>
+<p>再次使用 <code>lsblk</code> 查看分区情况，确认无误后可进行格式化。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+<h4 id="格式化">格式化</h4>
+<p>使用 <code>mkfs</code> 进行格式化：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkfs.fat -F32 /dev/nvme0n1p1</span><br><span class="line">mkswap /dev/nvme0n1p2</span><br><span class="line">mkfs.ext4 /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
+<p>当然你也可以选择自己喜欢的文件系统 (xfs, ext3, …)，这里选择 ext4 作为演示。</p>
+<p><img src="format.png" alt="格式化分区"></p>
+<h4 id="挂载文件系统">挂载文件系统</h4>
+<blockquote>
+<p>一般情况下，进行挂载前，最好先确定几件事：</p>
+<ul>
+<li>单一文件系统不应该被重复挂载在不同的挂载点（目录）中；</li>
+<li>单一目录不应该重复挂载多个文件系统；</li>
+<li>要作为挂载点的目录，理论上应该都是空目录才行。</li>
+</ul>
+<p>参考：<a href="https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#mount">https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#mount</a></p>
+</blockquote>
+<p>使用 <code>mount</code> 挂载文件系统，使用 <code>swapon</code> 开启 swap：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mount --<span class="built_in">mkdir</span> /dev/nvme0n1p1 /mnt/efi</span><br><span class="line">swapon /dev/nvme0n1p2</span><br><span class="line">mount /dev/nvme0n1p3 /mnt</span><br></pre></td></tr></table></figure>
+<p>使用 <code>lsblk</code> 确认文件系统已经被正确挂载。</p>
+<p><img src="mount.png" alt="挂载文件系统"></p>
+<blockquote>
+<p>注：示例的 /efi 文件夹命名并不遵守 FHS （Filesystem Hierarchy Standard），关于 EFI 文件系统到底是挂载在 /boot/efi 更合理还是挂载在 /efi 更合理，一直有争议，目前尚未解决。</p>
+<p>参考：</p>
+<ul>
+<li>/boot, /boot/efi or /efi: <a href="https://www.reddit.com/r/archlinux/comments/1f9d40g/efi_partition_boot_bootefi_or_efi/">https://www.reddit.com/r/archlinux/comments/1f9d40g/efi_partition_boot_bootefi_or_efi/</a></li>
+<li>FHS: <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html">https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html</a></li>
+</ul>
+</blockquote>
+<p>这是安装 Linux 最重要的步骤之一，请务必确认正确操作！</p>
+<h3 id="选择镜像">选择镜像</h3>
+<p>使用 iso 自带的 <code>reflector</code> 自动选择最快的镜像：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="built_in">cp</span> /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup</span><br><span class="line"><span class="comment"># 选择镜像并保存</span></span><br><span class="line">reflector --verbose --latest 10 --<span class="built_in">sort</span> rate --save /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
+<p><img src="reflector.png" alt="选择镜像"></p>
+<p>虽然有很多镜像连接失败，但是实测使用 <code>reflector</code> 后下载速度明显提高，如果觉得下载速度太慢可以尝试替换成清华源，或者多试几次。</p>
+<h3 id="安装系统和工具">安装系统和工具</h3>
+<p>使用 <code>pacstrap</code> 安装系统和工具：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacstrap /mnt base linux linux-firmware net-tools networkmanager openssh vi vim </span><br></pre></td></tr></table></figure>
+<p>安装 <code>vi</code> 是为了使用 <code>visudo</code>。</p>
+<h3 id="创建-File-System-Table-fstab">创建 File System Table (fstab)</h3>
+<blockquote>
+<p>系统挂载的一些限制：</p>
+<ul>
+<li>根目录 / 是必须挂载的，而且一定要先于其他 mount point 被挂载进来；</li>
+<li>其他 mount point 必须为已建立的目录，可任意指定，但一定要遵守必须的系统目录架构原则 (FHS) ；</li>
+<li>所有 mount point 在同一时间内，只能挂载一次；</li>
+<li>所有 partition 在同一时间内，只能挂载一次；</li>
+<li>如若进行卸载，您必须先将工作目录移到 mount point （及其子目录）之外。</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li>fstab: <a href="https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#fstab">https://linux.vbird.org/linux_basic/centos7/0230filesystem.php#fstab</a></li>
+</ul>
+</blockquote>
+<p>/etc/fstab 就是将我们利用 <code>mount</code> 指令进行挂载时，将所有的选项与参数写入到这个文档中。开机时，操作系统根据这个文件里的记录，自动挂载记录的文件系统到对应目录下。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+<p><code>-U</code> 指记录分区的 UUID（Universally Unique IDentifier），因为每块磁盘每个分区的 UUID 是唯一的，因此比较推荐使用 UUID 来记录。</p>
+<p>使用以下命令验证 fstab 的正确性：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+<p>有时候 <code>genfstab</code> 会莫名其妙少掉几个文件系统或者根本不工作，这时候把所有文件系统重新挂载一遍然后再次使用 <code>genfstab</code> 的上述命令，进入 vim 手动删除多余的记录即可。确保根目录 / 最先挂载。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+<p><img src="edit_fstab.png" alt="使用 vim 手动编辑 fstab"></p>
+<blockquote>
+<p>注：需要知道如何使用 vim 进行编辑和保存退出。</p>
+</blockquote>
+<h3 id="Arch-系统配置">Arch 系统配置</h3>
+<p>进入新系统：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：进入前请再次确认文件系统已被正确挂载。</p>
+</blockquote>
+<h4 id="设置系统语言">设置系统语言</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/locale.gen</span><br></pre></td></tr></table></figure>
+<p>使用 vim 的搜索功能，找到 en_US.UTF-8 UFT-8 或者 zh_CN.UTF-8 UTF-8 （根据个人喜好），取消注释，这里选择 en_US.UTF-8：</p>
+<p><img src="locale-gen.png" alt="设置 locale.gen"></p>
+<p>保存退出，生成语言环境。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
+<p>设置 LANG 变量。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;LANG=en_US.UTF-8&quot;</span>  &gt; /etc/locale.conf</span><br></pre></td></tr></table></figure>
+<h4 id="设置时区">设置时区</h4>
+<p>创建到上海时区的软连接：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：善用 Tab</p>
+</blockquote>
+<p>将硬件时钟设置为 UTC：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hwclock --systohc --utc</span><br></pre></td></tr></table></figure>
+<h4 id="设置主机名">设置主机名</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> “<span class="built_in">arch</span>“ &gt; /etc/hostname</span><br></pre></td></tr></table></figure>
+<p><code>arch</code> 可替换成个人喜好的主机名。</p>
+<h4 id="设置-root-密码">设置 root 密码</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+<h4 id="安装-GRUB-引导程序">安装 GRUB 引导程序</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br><span class="line">grub-install --efi--directory=/efi</span><br><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
+<h3 id="重新启动">重新启动</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h2 id="成功安装-Arch">成功安装 Arch</h2>
+<p>重启后 GRUB 应能正确识别 EFI 并且加载 Arch Linux，使用 root 账户登录后显示如下界面：</p>
+<p><img src="success.png" alt="成功安装 Arch Linux"></p>
+<h3 id="联网-2">联网</h3>
+<p>使用 <code>systemctl</code> 启动 <code>NetworkManager</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start NetworkManager</span><br><span class="line">systemctl status NetworkManager</span><br><span class="line">systemctl <span class="built_in">enable</span> NetworkManager</span><br></pre></td></tr></table></figure>
+<p><img src="NetworkManager.png" alt="启动网络"></p>
+<h3 id="创建用户">创建用户</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">useradd -mg <span class="built_in">users</span> -G wheel,storage,power -s /bin/bash your_new_user</span><br><span class="line">passwd your_new_user</span><br><span class="line">chage -d 0 your_new_user</span><br></pre></td></tr></table></figure>
+<p><code>your_new_user</code> 可以替换。<br>
+<code>chage -d 0</code> 使用户密码过期，以便登录时重置密码，不过虚拟机使用 sddm 登录时出现了一些输入问题，因此此处可选择不执行，或者通过 <code>Ctrl+Alt+F1</code> 等调出 tty 来登录并修改密码。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S <span class="built_in">sudo</span></span><br><span class="line">visudo</span><br></pre></td></tr></table></figure>
+<p>找到 <code>%wheel ALL=(ALL:ALL) ALL</code> 取消注释。</p>
+<p><img src="wheel.png" alt="取消注释 wheel 群组"></p>
+<blockquote>
+<p>参考：<a href="https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php#users">https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php#users</a></p>
+</blockquote>
+<h3 id="图形界面安装">图形界面安装</h3>
+<blockquote>
+<p>注：可安装并使用 <code>reflector</code> 提高下载速度，见前文。</p>
+</blockquote>
+<p>示例安装 KDE Plasma 6 桌面，可根据喜好选择安装其他桌面（GNOME，Xfce，Hyprland…）</p>
+<h4 id="安装驱动">安装驱动</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S xf86-video-intel</span><br></pre></td></tr></table></figure>
+<h4 id="安装-Xorg">安装 Xorg</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S xorg</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：如果使用 KDE 或 GNOME 桌面，其本身已支持 Wayland，不需要单独安装 Xorg。</p>
+<p>参考：<a href="https://wiki.archlinuxcn.org/wiki/KDE">https://wiki.archlinuxcn.org/wiki/KDE</a></p>
+</blockquote>
+<h4 id="安装-sddm">安装 sddm</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S sddm</span><br><span class="line">systemctl <span class="built_in">enable</span> sddm	</span><br></pre></td></tr></table></figure>
+<h4 id="安装-Plasma-桌面">安装 Plasma 桌面</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S plasma konsole</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：<code>kde-applications</code> 为 KDE 桌面的全套应用，由于太多用不到，故只安装桌面和终端。</p>
+</blockquote>
+<h4 id="安装-fcitx5-输入法">安装 fcitx5 输入法</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S fcitx5 fcitx5-configtool fcitx5-chinese-addons fcitx5-qt fcitx5-gtk</span><br></pre></td></tr></table></figure>
+<h4 id="安装文泉驿中文字体">安装文泉驿中文字体</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pacman -S wqy-microhei</span><br></pre></td></tr></table></figure>
+<h4 id="重启">重启</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>重启后应该正常进入 sddm 界面：</p>
+<p><img src="sddm.png" alt="sddm 界面"></p>
+<p>输入密码后进入 KDE Plasma 桌面：</p>
+<p><img src="kde-plasma.png" alt="KDE Plasma 桌面"></p>
+<p><img src="fastfetch.png" alt="虚拟机信息"></p>
+<h2 id="安装后的常见问题">安装后的常见问题</h2>
+<h3 id="主机共享剪贴板">主机共享剪贴板</h3>
+<p>安装 <code>open-vm-tools</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S open-vm-tools</span><br></pre></td></tr></table></figure>
+<p>重启，然后就可以用啦~</p>
+<h3 id="分辨率">分辨率</h3>
+<p>鼠标右键进入 <code>Display Configuration</code>，调整分辨率和缩放，使界面清晰。</p>
+<p><img src="resolution.png" alt="Display Configuration"></p>
+<h3 id="网络代理">网络代理</h3>
+<p>VMware 提供的主机地址为 <code>192.168.245.1</code> ，设置即可。</p>
+<h3 id="声音">声音</h3>
+<p>找到 konsole，安装 firefox 浏览器：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S firefox</span><br></pre></td></tr></table></figure>
+<p>随便打开一个视频，发现虚拟机十分卡顿，并且没有声音：</p>
+<p><img src="bad_apple.png" alt="播放 Bad Apple"></p>
+<p>解决方案：需要按如下方式编辑 WirePlumber 配置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.config/wireplumber/wireplumber.conf.d/</span><br><span class="line"><span class="built_in">cd</span> ~/.config/wireplumber/wireplumber.conf.d</span><br></pre></td></tr></table></figure>
+<p>然后在编辑器中创建 <code>~/.config/wireplumber/wireplumber.conf.d/50-alsa-config.conf</code> 并添加：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">monitor.alsa.rules = <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    matches = <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        node.name = <span class="string">&quot;~alsa_output.*&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">    actions = <span class="punctuation">&#123;</span></span><br><span class="line">      update-props = <span class="punctuation">&#123;</span></span><br><span class="line">        api.alsa.period-size   = <span class="number">1024</span></span><br><span class="line">        api.alsa.headroom      = <span class="number">8192</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<p>之后，通过 <code>systemctl --user restart wireplumber pipewire pipewire-pulse</code> 重新启动所有服务。</p>
+<blockquote>
+<p>参考：</p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Troubleshooting#stuttering-audio-in-virtual-machine">Pipewire Wiki</a></li>
+<li><a href="https://www.reddit.com/r/Ubuntu/comments/1ga9shh/audio_stuttering_issue_in_ubuntu_2410_virtual/?tl=zh-hans">Ubuntu 24.10 虚拟机在 VMWare Pro 17 上音频卡顿问题，宿主机是 Windows 11</a></li>
+</ul>
+</blockquote>
+<h3 id="找不到主机共享文件夹">找不到主机共享文件夹</h3>
+<p>大部分原因是开机后共享文件夹没有自动挂载，导致 /mnt/hgfs 下找不到共享文件夹。</p>
+<p>解决方案：将共享文件夹写入 fstab 使其开机自动挂载：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;.host:/ /mnt/hgfs fuse.vmhgfs-fuse allow_other,defaults 0 0&#x27;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/fstab</span><br></pre></td></tr></table></figure>
+<p>重启即可。</p>
+<p>或者临时挂载：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other</span><br></pre></td></tr></table></figure>
+<h3 id="虚拟机总是使用-CPU-的效率核（E-core）">虚拟机总是使用 CPU 的效率核（E-core）</h3>
+<p>找到 VMware 的可执行文件或快捷方式，打开属性的<code>兼容性</code>选项，勾选<code>以管理员身份运行此程序</code>，可避免虚拟机不使用 P-core，即性能核。</p>
+<h2 id="写在最后">写在最后</h2>
+<p>安装 Arch 不仅是个熟悉 Linux 的过程，也是个体力活… Arch 是介于 Ubuntu 这种开箱即用的发行版和 Gentoo 这种全部自己动手配置的发行版之间的一种平衡，说实话对我来说已经够用了。</p>
+]]></content>
       <categories>
-          
-          <category> Blog 大事纪 </category>
-          
+        <category>技术</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 纪事 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
 </search>
