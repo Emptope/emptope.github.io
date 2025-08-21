@@ -3525,6 +3525,7 @@ figure.highlight pre .javascript .function {
   cursor: pointer;
 }
 #page-header #scroll-down .scroll-down-effects {
+  display: none;
   position: relative;
   width: 100%;
   color: var(--light-grey);
