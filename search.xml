@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>你好!</title>
-    <url>/2025/01/29/hello/</url>
-    <content><![CDATA[<p>欢迎来到我的 Blog!<br>
-这是我的第一篇文章。<br>
-(十分简短…)</p>
-<p>这是代码块测试</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Hello World!&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这是数学公式测试</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + b = c 
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span></p>
-<p>这是图片插入测试</p>
-<p><img src="celestial_mountains.jpg" alt="Celestial Mountains"></p>
-]]></content>
-      <categories>
-        <category>Blog 大事纪</category>
-      </categories>
-      <tags>
-        <tag>纪事</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Arch 虚拟机安装小结</title>
     <url>/2025/08/19/Arch-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85%E5%B0%8F%E7%BB%93/</url>
     <content><![CDATA[<p>暑假闲来无事整了台 Arch 虚拟机玩玩，刚好记录一下安装的流程以及可能出现的问题。安装步骤力求简单直接，即省略了大部分可有可无的步骤，只保留必要步骤。</p>
@@ -291,6 +270,27 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>你好!</title>
+    <url>/2025/01/29/hello/</url>
+    <content><![CDATA[<p>欢迎来到我的 Blog!<br>
+这是我的第一篇文章。<br>
+(十分简短…)</p>
+<p>这是代码块测试</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Hello World!&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是数学公式测试</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + b = c 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span></p>
+<p>这是图片插入测试</p>
+<p><img src="celestial_mountains.jpg" alt="Celestial Mountains"></p>
+]]></content>
+      <categories>
+        <category>Blog 大事纪</category>
+      </categories>
+      <tags>
+        <tag>纪事</tag>
       </tags>
   </entry>
 </search>
