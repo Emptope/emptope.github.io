@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><style id="site-critical">html,body{background-color:#526779}html[data-theme="dark"],html[data-theme="dark"] body{background-color:#141820}#web_bg{animation:none!important;opacity:1}</style><link rel="preload" as="image" href="/assets/images/30e5dad322ddb7d1.webp" media="(min-width: 769px)" fetchpriority="high"><link rel="preload" as="image" href="/assets/images/dc26b86eed62f49f.webp" media="(max-width: 768px)" fetchpriority="high"><style id="site-background">#web_bg{background-image:url("/assets/images/30e5dad322ddb7d1.webp"),url("data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABIAPxFwr1CsJiQisBgMAYAiCUAVJPHYL85j0raBXrXNXSAA/RNu6zU8A1RtMo8vqtfB697uWzvM8ctFA7R+Ke5Q6qD8L4P08ggtLxPASe8cHThqsy8AAAA=")}@media(max-width:768px){#web_bg{background-image:url("/assets/images/dc26b86eed62f49f.webp"),url("data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABIAPxFwr1CsJiQisBgMAYAiCUAVJPHYL85j0raBXrXNXSAA/RNu6zU8A1RtMo8vqtfB697uWzvM8ctFA7R+Ke5Q6qD8L4P08ggtLxPASe8cHThqsy8AAAA=")}}</style><title>几则感悟 | Tuo's Home</title><meta name="author" content="Tuo Yao"><meta name="copyright" content="Tuo Yao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#fffdf7"><meta name="description" content="随笔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="几则感悟">
+<meta property="og:url" content="https://emptope.github.io/posts/2/index.html">
+<meta property="og:site_name" content="Tuo's Home">
+<meta property="og:description" content="随笔">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://emptope.github.io/img/avatar.webp">
+<meta property="article:published_time" content="2026-09-15T12:52:31.000Z">
+<meta property="article:modified_time" content="2026-09-15T12:58:06.452Z">
+<meta property="article:author" content="Tuo Yao">
+<meta property="article:tag" content="Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://emptope.github.io/img/avatar.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "几则感悟",
+  "url": "https://emptope.github.io/posts/2/",
+  "image": "https://emptope.github.io/img/avatar.webp",
+  "datePublished": "2026-09-15T12:52:31.000Z",
+  "dateModified": "2026-09-15T12:58:06.452Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Tuo Yao",
+      "url": "https://emptope.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.webp"><link rel="canonical" href="https://emptope.github.io/posts/2/index.html"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        try { localStorage.setItem(key, JSON.stringify(data)) } catch {}
+      },
+      get: key => {
+        let itemStr
+        try { itemStr = localStorage.getItem(key) } catch { return }
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            try { localStorage.removeItem(key) } catch {}
+            return
+          }
+
+          return data.value
+        } catch {
+          try { localStorage.removeItem(key) } catch {}
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#141820')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#fffdf7')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="/css/index.css?v=ee989d1ff71bf5f8"><link rel="stylesheet" href="/assets/vendor/fontawesome/css/site.min.css?v=ddc612f73bcc244e"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":true,"hitsPerPage":10},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.13.0',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '几则感悟',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><script>document.documentElement.classList.add('site-overlay-scrollbar')</script><link rel="stylesheet" href="/css/palette.css?v=a97f07a5643b839f"><link rel="stylesheet" href="/css/site.css?v=73777468949dc4c8"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar" loading="eager" width="256" height="256" decoding="async"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Tuo's Home</span></a><a class="nav-page-title" href="/"><span class="site-name">几则感悟</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">几则感悟</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-09-15T12:52:31.000Z" title="发表于 2026-09-15 20:52:31">2026-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-15T12:58:06.452Z" title="更新于 2026-09-15 20:58:06">2026-09-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>时间永是单调地向前流逝着。时间的单调性决定了世界的不可逆。每当我回忆时，总是感叹强大的不可逆，臣服在这命运所决定的轨迹之下。</p>
+<hr>
+<p>做题家的定义：做题家是指做题能力强的人。</p>
+<p>题目的定义：题目是指做题家认为有标准答案、可通过特定途径求解的问题。</p>
+<p>做题家的几个基本特征：</p>
+<ol>
+<li>见到题就想做；</li>
+<li>不做题就会感到空虚；</li>
+<li>自卑；</li>
+</ol>
+<p>符合特征的做题家，通常容易陷入到做题循环中：</p>
+<ol>
+<li>
+<p>见到题就想做 -&gt; 发现自己能做出某些题 -&gt; 继续见到题就想做；</p>
+</li>
+<li>
+<p>见到题就想做 -&gt; 发现自己无论如何就是做不出某些题 -&gt; 陷入自我怀疑 -&gt; 停止做题，感到空虚 -&gt; 开始思考自身的问题 -&gt; 陷入自卑 -&gt; 试图通过继续做题证明自己 -&gt; 继续见到题就想做；</p>
+</li>
+<li>
+<p>见到题就想做 -&gt; 发现自己费劲求解出的题已经被别人通过各种优势轻松解决，甚至不需要求解过程 -&gt; 陷入自卑 -&gt; 试图通过继续做题逃避失败或者证明自己 -&gt; 继续见到题就想做；</p>
+</li>
+</ol>
+<p>这大概是中国学生的通病，或者网络上所谓的“学生思维”。但是，我认为“学生思维”这个词把矛盾和问题指向思考能力尚未成熟的学生，不免有“归因错误”和“矫枉过正”的嫌疑。做题家的发展路径与自然和社会相隔离，这可能是要首先考虑的问题。</p>
+<hr>
+<p>大部分的情感都是在与人的接触中产生的，小部分情感是由个体天然产生的。因此，剥离情感的第一步是：减少与他人的接触。理想情况下，如果彻底断绝与他人的任何联系，则断绝了大部分情感的根源，只会保留少部分天然情感。但是，现实社会中，我们不可能做到与他人保持绝对隔离，所以只能做到尽量减少与他人的接触，从而降低情感产生的可能性。</p>
+<p>其次，情感的产生有时会与符号相关联，如某个特定地点等。因此，剥离情感的第二步是：保持大脑的空转，减少对无关事物的思考。即使没有任何事情，我们也绝不能使大脑空闲下来，因为大脑的空闲会诱使我们过度思考某些无关紧要的事情，从而产生不必要的情感。专注于当下的事情，这能很好地保持大脑的运行状态。</p>
+<hr>
+<p>这几日我对精神的研究发现：无所事事、虚无等这些“空转（nop)”的情绪状态，都存在一种共同来源：当个体面对太多的可能性，其对未知的惧怕，或者说更多体现在对财产损失或被占有的恐惧之中————这里指广义的财产，包括物质与精神————导致其不敢作出决策，或过于满足现状，未能进入“激发态”中；当变故出现，个体感受到假想敌的真实存在，使其被激发，才可能挣脱出这个恶性循环之中。俗话说“困于心，衡于虑，而后作”大概就是这个道理。</p>
+<p>所以，如何跳出单调的生活？有人说多尝试新事物。但是，当我们对新事物越发熟悉，便容易忘记其单调本质。这时一种好的替代方法是：树立一个敌人。不论真或假，奋起击败它；击败的目标定得太高也无妨，因这敌人本质上是虚构的：每个人都不需要击败任何人也能度过一生。这大概是“与人斗，其乐无穷”的一种解释罢。</p>
+<hr>
+<p align="right">分别作于主图</p></article><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/1/" title="Arch 虚拟机安装小结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Arch 虚拟机安装小结</div></div><div class="info-2"><div class="info-item-1">VMware 安装 ArchLinux 的流程以及遇到的一些坑</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar" loading="eager" width="256" height="256" decoding="async"></div><div class="author-info-name">Tuo Yao</div><div class="author-info-description">学生</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Emptope"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"></div><div class="footer_custom_text">© Tuo Yao · All Rights Reserved.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=b831bac00b903647" defer=""></script><script src="/js/main.js?v=8d10ad0cbf7dc3f2" defer=""></script><div class="js-pjax"></div><script src="/js/scrollbar.js?v=b1a2c2ef78862aa5" defer=""></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="Search" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=eafcd30f15160494" defer=""></script></div></div></body></html>

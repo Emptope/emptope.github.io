@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><style id="site-critical">html,body{background-color:#526779}html[data-theme="dark"],html[data-theme="dark"] body{background-color:#141820}#web_bg{animation:none!important;opacity:1}</style><link rel="preload" as="image" href="/assets/images/30e5dad322ddb7d1.webp" media="(min-width: 769px)" fetchpriority="high"><link rel="preload" as="image" href="/assets/images/dc26b86eed62f49f.webp" media="(max-width: 768px)" fetchpriority="high"><style id="site-background">#web_bg{background-image:url("/assets/images/30e5dad322ddb7d1.webp"),url("data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABIAPxFwr1CsJiQisBgMAYAiCUAVJPHYL85j0raBXrXNXSAA/RNu6zU8A1RtMo8vqtfB697uWzvM8ctFA7R+Ke5Q6qD8L4P08ggtLxPASe8cHThqsy8AAAA=")}@media(max-width:768px){#web_bg{background-image:url("/assets/images/dc26b86eed62f49f.webp"),url("data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABIAPxFwr1CsJiQisBgMAYAiCUAVJPHYL85j0raBXrXNXSAA/RNu6zU8A1RtMo8vqtfB697uWzvM8ctFA7R+Ke5Q6qD8L4P08ggtLxPASe8cHThqsy8AAAA=")}}</style><title>2026 | Tuo's Home</title><meta name="author" content="Tuo Yao"><meta name="copyright" content="Tuo Yao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#fffdf7"><meta name="description" content="Tuo 的个人博客">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026">
+<meta property="og:url" content="https://emptope.github.io/archives/2026/index.html">
+<meta property="og:site_name" content="Tuo's Home">
+<meta property="og:description" content="Tuo 的个人博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://emptope.github.io/img/avatar.webp">
+<meta property="article:author" content="Tuo Yao">
+<meta property="article:tag" content="Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://emptope.github.io/img/avatar.webp"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.webp"><link rel="canonical" href="https://emptope.github.io/archives/2026/index.html"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        try { localStorage.setItem(key, JSON.stringify(data)) } catch {}
+      },
+      get: key => {
+        let itemStr
+        try { itemStr = localStorage.getItem(key) } catch { return }
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            try { localStorage.removeItem(key) } catch {}
+            return
+          }
+
+          return data.value
+        } catch {
+          try { localStorage.removeItem(key) } catch {}
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#141820')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#fffdf7')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="/css/index.css?v=ee989d1ff71bf5f8"><link rel="stylesheet" href="/assets/vendor/fontawesome/css/site.min.css?v=ddc612f73bcc244e"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":true,"hitsPerPage":10},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.13.0',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2026',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'archive'
+}</script><script>document.documentElement.classList.add('site-overlay-scrollbar')</script><link rel="stylesheet" href="/css/palette.css?v=a97f07a5643b839f"><link rel="stylesheet" href="/css/site.css?v=73777468949dc4c8"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar" loading="eager" width="256" height="256" decoding="async"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page fixed" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Tuo's Home</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">2026</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="archive"><div class="article-sort-title">全部文章 - 1</div><div class="article-sort"><div class="article-sort-item year">2026</div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-09-15T12:52:31.000Z" title="发表于 2026-09-15 20:52:31">2026-09-15</time></div><a class="article-sort-item-title" href="/posts/2/" title="几则感悟">几则感悟</a></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"></div><div class="footer_custom_text">© Tuo Yao · All Rights Reserved.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=b831bac00b903647" defer=""></script><script src="/js/main.js?v=8d10ad0cbf7dc3f2" defer=""></script><div class="js-pjax"></div><script src="/js/scrollbar.js?v=b1a2c2ef78862aa5" defer=""></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="Search" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=eafcd30f15160494" defer=""></script></div></div></body></html>
